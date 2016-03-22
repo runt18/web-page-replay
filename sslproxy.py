@@ -60,7 +60,7 @@ def _SetUpUsingDummyCert(handler):
     if not host:
       logging.error('Dropping request without SNI')
       return ''
-    raise certutils.Error('SSL handshake error %s: %s' % (host, str(v)))
+    raise certutils.Error('SSL handshake error {0!s}: {1!s}'.format(host, str(v)))
 
   # Re-wrap the read/write streams with our new connection.
   handler.rfile = socket._fileobject(handler.connection, 'rb', handler.rbufsize,

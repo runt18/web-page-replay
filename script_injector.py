@@ -75,7 +75,7 @@ def InjectScript(content, content_type, script_to_inject):
     already_injected = not content or script_to_inject in content
     if not already_injected:
       def InsertScriptAfter(matchobj):
-        return '%s<script>%s</script>' % (matchobj.group(0), script_to_inject)
+        return '{0!s}<script>{1!s}</script>'.format(matchobj.group(0), script_to_inject)
 
       content, is_injected = HEAD_RE.subn(InsertScriptAfter, content, 1)
       if not is_injected:
@@ -83,7 +83,7 @@ def InjectScript(content, content_type, script_to_inject):
       if not is_injected:
         content, is_injected = DOCTYPE_RE.subn(InsertScriptAfter, content, 1)
       if not is_injected:
-        content = '<script>%s</script>%s' % (script_to_inject, content)
+        content = '<script>{0!s}</script>{1!s}'.format(script_to_inject, content)
         logging.warning('Inject at the very beginning, because no tag of '
                         '<head>, <html> or <!doctype html> is found.')
   return content, already_injected

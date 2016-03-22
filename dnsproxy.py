@@ -147,7 +147,7 @@ class PrivateIpFilter(object):
 
   def InitializeArchiveHosts(self):
     """Recompute the archive_hosts from the http_archive."""
-    self.archive_hosts = set('%s.' % req.host.split(':')[0]
+    self.archive_hosts = set('{0!s}.'.format(req.host.split(':')[0])
                              for req in self.http_archive)
 
 
@@ -279,7 +279,7 @@ class DnsProxyServer(SocketServer.ThreadingUDPServer,
     except socket.error, (error_number, msg):
       if error_number == errno.EACCES:
         raise DnsProxyException(
-            'Unable to bind DNS server on (%s:%s)' % (host, port))
+            'Unable to bind DNS server on ({0!s}:{1!s})'.format(host, port))
       raise
     self.dns_lookup = dns_lookup or (lambda host: self.server_address[0])
     self.server_port = self.server_address[1]

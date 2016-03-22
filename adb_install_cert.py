@@ -128,8 +128,8 @@ class AndroidCertInstaller(object):
     self.reformatted_cert_fname = output.partition('\n')[0].strip() + '.0'
     self.reformatted_cert_path = os.path.join(os.path.dirname(self.cert_path),
                                               self.reformatted_cert_fname)
-    self.android_cacerts_path = ('/system/etc/security/cacerts/%s' %
-                                 self.reformatted_cert_fname)
+    self.android_cacerts_path = ('/system/etc/security/cacerts/{0!s}'.format(
+                                 self.reformatted_cert_fname))
 
   def remove_cert(self):
     self._generate_reformatted_cert_path()
@@ -156,8 +156,8 @@ class AndroidCertInstaller(object):
     self._remove(self.reformatted_cert_path)
     self._adb_su_shell('mount', '-o', 'remount,rw', '/system')
     self._adb_su_shell(
-        'cp', '/sdcard/%s' % self.reformatted_cert_fname,
-        '/system/etc/security/cacerts/%s' % self.reformatted_cert_fname)
+        'cp', '/sdcard/{0!s}'.format(self.reformatted_cert_fname),
+        '/system/etc/security/cacerts/{0!s}'.format(self.reformatted_cert_fname))
     self._adb_su_shell('chmod', '644', self.android_cacerts_path)
     if not self._is_cert_installed():
       raise CertInstallError('Cert Install Failed')

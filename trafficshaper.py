@@ -32,7 +32,7 @@ class BandwidthValueError(TrafficShaperException):
     self.value = value
 
   def __str__(self):
-    return 'Value, "%s", does not match regex: %s' % (
+    return 'Value, "{0!s}", does not match regex: {1!s}'.format(
         self.value, BANDWIDTH_PATTERN)
 
 

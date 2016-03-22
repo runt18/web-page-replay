@@ -205,8 +205,7 @@ class OptionsWrapper(object):
       if option in self._nondefaults:
         for bad_option in bad_options:
           if bad_option in self._nondefaults:
-            self._parser.error('Option --%s cannot be used with --%s.' %
-                                (bad_option, option))
+            self._parser.error('Option --{0!s} cannot be used with --{1!s}.'.format(bad_option, option))
 
   def _CheckValidIp(self, name):
     """Give an error if option |name| is not a valid IPv4 address."""
@@ -215,7 +214,7 @@ class OptionsWrapper(object):
       try:
         socket.inet_aton(value)
       except Exception:
-        self._parser.error('Option --%s must be a valid IPv4 address.' % name)
+        self._parser.error('Option --{0!s} must be a valid IPv4 address.'.format(name))
 
   def _CheckFeatureSupport(self):
     if (self._options.should_generate_certs and
@@ -424,8 +423,8 @@ def GetOptionParser():
       action='store',
       type='choice',
       choices=net_configs.NET_CONFIG_NAMES,
-      help='Select a set of network options: %s.' % ', '.join(
-          net_configs.NET_CONFIG_NAMES))
+      help='Select a set of network options: {0!s}.'.format(', '.join(
+          net_configs.NET_CONFIG_NAMES)))
   network_group.add_option('--shaping_type', default='dummynet',
       action='store',
       choices=('dummynet', 'proxy'),

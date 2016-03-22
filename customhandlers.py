@@ -137,7 +137,7 @@ class CustomHandlers(object):
     data = data[len(IMAGE_DATA_PREFIX):]
     png = base64.b64decode(data)
     filename = os.path.join(self.screenshot_dir,
-                            '%s-%s.png' % (request.host, basename))
+                            '{0!s}-{1!s}.png'.format(request.host, basename))
     if not os.access(self.screenshot_dir, os.W_OK):
       logging.error('Unable to write to: %s', filename)
       return SimpleResponse(400)

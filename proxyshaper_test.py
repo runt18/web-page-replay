@@ -52,7 +52,7 @@ class TimedTestCase(unittest.TestCase):
     """
     delta = tolerance * expected
     if actual > expected + delta or actual < expected - delta:
-      self.fail('%s is not equal to expected %s +/- %s%%' % (
+      self.fail('{0!s} is not equal to expected {1!s} +/- {2!s}%'.format(
               actual, expected, 100 * tolerance))
 
 
@@ -128,7 +128,7 @@ class GetBitsPerSecondTest(unittest.TestCase):
     for dummynet_option, expected_bps in VALID_RATES:
       bps = proxyshaper.GetBitsPerSecond(dummynet_option)
       self.assertEqual(
-          expected_bps, bps, 'Unexpected result for %s: %s != %s' % (
+          expected_bps, bps, 'Unexpected result for {0!s}: {1!s} != {2!s}'.format(
               dummynet_option, expected_bps, bps))
 
   def testRaisesOnUnexpectedValues(self):

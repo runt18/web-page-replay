@@ -47,7 +47,7 @@ class LogUrl(rule.Rule):
       A (should_stop, return_value) tuple, e.g. (False, True).
     """
     del response  # unused.
-    url = '%s%s' % (request.host, request.full_path)
+    url = '{0!s}{1!s}'.format(request.host, request.full_path)
     if not self._url_re.match(url):
       return False, return_value
 
@@ -66,6 +66,6 @@ def _ToString(obj, *items):
   pkg = (obj.__module__[:obj.__module__.rfind('.') + 1]
          if '.' in obj.__module__ else '')
   clname = obj.__class__.__name__
-  args = [('%s=r\'%s\'' % item if isinstance(item[1], basestring)
-           else '%s=%s' % item) for item in items if item]
-  return '%s%s(%s)' % (pkg, clname, ', '.join(args))
+  args = [('{0!s}=r\'{1!s}\''.format(*item) if isinstance(item[1], basestring)
+           else '{0!s}={1!s}'.format(*item)) for item in items if item]
+  return '{0!s}{1!s}({2!s})'.format(pkg, clname, ', '.join(args))

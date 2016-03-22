@@ -98,10 +98,10 @@ class HttpArchiveHandler(BaseHTTPServer.BaseHTTPRequestHandler):
       return None
 
     parsed = urlparse.urlparse(self.path)
-    params = ';%s' % parsed.params if parsed.params else ''
-    query = '?%s' % parsed.query if parsed.query else ''
-    fragment = '#%s' % parsed.fragment if parsed.fragment else ''
-    full_path = '%s%s%s%s' % (parsed.path, params, query, fragment)
+    params = ';{0!s}'.format(parsed.params) if parsed.params else ''
+    query = '?{0!s}'.format(parsed.query) if parsed.query else ''
+    fragment = '#{0!s}'.format(parsed.fragment) if parsed.fragment else ''
+    full_path = '{0!s}{1!s}{2!s}{3!s}'.format(parsed.path, params, query, fragment)
 
     StubRequest = collections.namedtuple('StubRequest', ('host', 'full_path'))
     request, response = StubRequest(host, full_path), None
@@ -159,7 +159,7 @@ class HttpArchiveHandler(BaseHTTPServer.BaseHTTPRequestHandler):
           time.sleep(delay / 1000.0)
         if is_chunked:
           # Write chunk length (hex) and data (e.g. "A\r\nTESSELATED\r\n").
-          self.wfile.write('%x\r\n%s\r\n' % (len(chunk), chunk))
+          self.wfile.write('{0:x}\r\n{1!s}\r\n'.format(len(chunk), chunk))
         else:
           self.wfile.write(chunk)
       if is_chunked:
@@ -324,8 +324,7 @@ class HttpProxyServer(SocketServer.ThreadingMixIn,
     try:
       BaseHTTPServer.HTTPServer.__init__(self, (host, port), self.HANDLER)
     except Exception, e:
-      raise HttpProxyServerError('Could not start HTTPServer on port %d: %s' %
-                                 (port, e))
+      raise HttpProxyServerError('Could not start HTTPServer on port {0:d}: {1!s}'.format(port, e))
     self.http_archive_fetch = http_archive_fetch
     self.custom_handlers = custom_handlers
     self.use_delays = use_delays
@@ -341,7 +340,7 @@ class HttpProxyServer(SocketServer.ThreadingMixIn,
 
     # Note: This message may be scraped. Do not change it.
     logging.warning(
-        '%s server started on %s:%d' % (self.protocol, self.server_address[0],
+        '{0!s} server started on {1!s}:{2:d}'.format(self.protocol, self.server_address[0],
                                         self.server_address[1]))
 
   def cleanup(self):

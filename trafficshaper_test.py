@@ -76,7 +76,7 @@ class TimedTcpHandler(SocketServer.StreamRequestHandler):
     contents = str(read_time)
     if data.startswith(RESPONSE_SIZE_KEY):
       num_response_bytes = int(data[len(RESPONSE_SIZE_KEY):data.index('\n')])
-      contents = '%s\n%s' % (contents,
+      contents = '{0!s}\n{1!s}'.format(contents,
                              '\x00' * (num_response_bytes - len(contents) - 1))
     self.wfile.write(contents)
 
@@ -139,7 +139,7 @@ class TimedTestCase(unittest.TestCase):
     """
     delta = tolerance * expected
     if actual > expected + delta or actual < expected - delta:
-      self.fail('%s is not equal to expected %s +/- %s%%' % (
+      self.fail('{0!s} is not equal to expected {1!s} +/- {2!s}%'.format(
               actual, expected, 100 * tolerance))
 
 
@@ -172,7 +172,7 @@ class TcpTrafficShaperTest(TimedTestCase):
     """Return time in milliseconds to receive |num_bytes|."""
 
     with self.tcp_socket_creator as s:
-      s.sendall('%s%s\n' % (RESPONSE_SIZE_KEY, num_bytes))
+      s.sendall('{0!s}{1!s}\n'.format(RESPONSE_SIZE_KEY, num_bytes))
       # TODO(slamm): Figure out why partial is shutdown needed to make it work.
       s.shutdown(socket.SHUT_WR)
       num_remaining_bytes = num_bytes
@@ -206,7 +206,7 @@ class TcpTrafficShaperTest(TimedTestCase):
     bandwidth_kbits = 2000
     expected_ms = 8.0 * num_bytes / bandwidth_kbits
     with TimedTcpServer(self.host, self.port):
-      with self.TrafficShaper(up_bandwidth='%sKbit/s' % bandwidth_kbits):
+      with self.TrafficShaper(up_bandwidth='{0!s}Kbit/s'.format(bandwidth_kbits)):
         self.assertValuesAlmostEqual(expected_ms, self.GetTcpSendTimeMs(num_bytes))
 
   def testTcpDownloadShaping(self):
@@ -218,7 +218,7 @@ class TcpTrafficShaperTest(TimedTestCase):
     bandwidth_kbits = 2000
     expected_ms = 8.0 * num_bytes / bandwidth_kbits
     with TimedTcpServer(self.host, self.port):
-      with self.TrafficShaper(down_bandwidth='%sKbit/s' % bandwidth_kbits):
+      with self.TrafficShaper(down_bandwidth='{0!s}Kbit/s'.format(bandwidth_kbits)):
         self.assertValuesAlmostEqual(expected_ms, self.GetTcpReceiveTimeMs(num_bytes))
 
   def testTcpInterleavedDownloads(self):

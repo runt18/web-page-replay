@@ -116,7 +116,7 @@ class _Rule(object):
 
 def _ToString(rules):
   """Formats a sequence of Rule objects into a string."""
-  return '[\n%s\n]' % '\n'.join('%s' % rule for rule in rules)
+  return '[\n{0!s}\n]'.format('\n'.join('{0!s}'.format(rule) for rule in rules))
 
 
 def _Load(file_obj, allowed_imports):
@@ -148,7 +148,7 @@ def _Load(file_obj, allowed_imports):
       raise Error('%s: Expecting a dict ARGS, not %s', i, type(args))
     fullname = str(name)
     if '.' not in fullname:
-      fullname = 'rules.%s' % fullname
+      fullname = 'rules.{0!s}'.format(fullname)
 
     modulename, classname = fullname.rsplit('.', 1)
     if '*' not in allowed_imports and modulename not in allowed_imports:

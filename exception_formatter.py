@@ -53,8 +53,8 @@ def _PrintFormattedTrace(processed_tb, frame, exception_string=None):
     filename = os.path.abspath(filename)
     if filename.startswith(base_dir):
       filename = filename[len(base_dir)+1:]
-    print >> sys.stderr, '  %s at %s:%d' % (function, filename, line)
-    print >> sys.stderr, '    %s' % text
+    print >> sys.stderr, '  {0!s} at {1!s}:{2:d}'.format(function, filename, line)
+    print >> sys.stderr, '    {0!s}'.format(text)
 
   # Format the exception.
   if exception_string:
@@ -73,7 +73,7 @@ def _PrintFormattedTrace(processed_tb, frame, exception_string=None):
       truncation_indication = ''
       if len(possibly_truncated_value) != len(value):
         truncation_indication = ' (truncated)'
-      print >> sys.stderr, '  %s: %s%s' % (variable.ljust(longest_variable + 1),
+      print >> sys.stderr, '  {0!s}: {1!s}{2!s}'.format(variable.ljust(longest_variable + 1),
                                            possibly_truncated_value,
                                            truncation_indication)
   else:

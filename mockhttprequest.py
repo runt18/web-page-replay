@@ -37,7 +37,7 @@ class ArchivedHttpRequest(object):
     self.trimmed_headers = headers
 
   def __str__(self):
-    return '%s %s%s %s' % (self.command, self.host, self.path,
+    return '{0!s} {1!s}{2!s} {3!s}'.format(self.command, self.host, self.path,
                            self.trimmed_headers)
 
   def __repr__(self):

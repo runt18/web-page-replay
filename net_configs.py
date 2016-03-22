@@ -44,5 +44,5 @@ NET_CONFIG_NAMES = _NET_CONFIGS.keys()
 def GetNetConfig(key):
   """Returns the NetConfig object corresponding to the given |key|."""
   if key not in _NET_CONFIGS:
-    raise KeyError('No net config with key: %s' % key)
+    raise KeyError('No net config with key: {0!s}'.format(key))
   return _NET_CONFIGS[key]

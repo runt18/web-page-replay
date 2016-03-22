@@ -17,9 +17,9 @@ import script_injector
 import unittest
 
 
-LONG_COMMENT = '<!--%s-->' % ('comment,' * 200)
+LONG_COMMENT = '<!--{0!s}-->'.format(('comment,' * 200))
 SCRIPT_TO_INJECT = 'var flag = 0;'
-EXPECTED_SCRIPT = '<script>%s</script>' % SCRIPT_TO_INJECT
+EXPECTED_SCRIPT = '<script>{0!s}</script>'.format(SCRIPT_TO_INJECT)
 TEXT_HTML = 'text/html'
 TEXT_CSS = 'text/css'
 APPLICATION = 'application/javascript'

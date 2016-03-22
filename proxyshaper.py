@@ -113,7 +113,7 @@ def GetBitsPerSecond(bandwidth):
   bw_re = r'^(\d+)(?:([KM])?(bit|Byte)/s)?$'
   match = re.match(bw_re, str(bandwidth))
   if not match:
-    raise BandwidthValueError('Value, "%s", does not match regex: %s' % (
+    raise BandwidthValueError('Value, "{0!s}", does not match regex: {1!s}'.format(
         bandwidth, bw_re))
   bw = int(match.group(1))
   if match.group(2) == 'K':

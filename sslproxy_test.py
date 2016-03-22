@@ -109,8 +109,7 @@ class Server(BaseHTTPServer.HTTPServer):
     try:
       BaseHTTPServer.HTTPServer.__init__(self, (host, port), self.HANDLER)
     except Exception, e:
-      raise RuntimeError('Could not start HTTPSServer on port %d: %s'
-                         % (port, e))
+      raise RuntimeError('Could not start HTTPSServer on port {0:d}: {1!s}'.format(port, e))
 
   def __enter__(self):
     thread = threading.Thread(target=self.serve_forever)

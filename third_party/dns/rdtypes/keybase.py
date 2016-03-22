@@ -84,7 +84,7 @@ class KEYBase(dns.rdata.Rdata):
         self.key = key
 
     def to_text(self, origin=None, relativize=True, **kw):
-        return '%d %d %d %s' % (self.flags, self.protocol, self.algorithm,
+        return '{0:d} {1:d} {2:d} {3!s}'.format(self.flags, self.protocol, self.algorithm,
                                 dns.rdata._base64ify(self.key))
 
     def from_text(cls, rdclass, rdtype, tok, origin = None, relativize = True):
@@ -97,7 +97,7 @@ class KEYBase(dns.rdata.Rdata):
             for flag in flag_names:
                 v = _flags_from_text.get(flag)
                 if v is None:
-                    raise dns.exception.SyntaxError('unknown flag %s' % flag)
+                    raise dns.exception.SyntaxError('unknown flag {0!s}'.format(flag))
                 flags &= ~v[1]
                 flags |= v[0]
         protocol = tok.get_string()
@@ -106,7 +106,7 @@ class KEYBase(dns.rdata.Rdata):
         else:
             protocol = _protocol_from_text.get(protocol)
             if protocol is None:
-                raise dns.exception.SyntaxError('unknown protocol %s' % protocol)
+                raise dns.exception.SyntaxError('unknown protocol {0!s}'.format(protocol))
 
         algorithm = dns.dnssec.algorithm_from_text(tok.get_string())
         chunks = []

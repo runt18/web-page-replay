@@ -69,7 +69,7 @@ class CalledProcessError(PlatformSettingsError):
     self.cmd = cmd
 
   def __str__(self):
-    return 'Command "%s" returned non-zero exit status %d' % (
+    return 'Command "{0!s}" returned non-zero exit status {1:d}'.format(
         ' '.join(self.cmd), self.returncode)
 
 
@@ -231,7 +231,7 @@ class _BasePlatformSettings(object):
 
     if os.path.sep not in command_args[0]:
       qualified_command = FindExecutable(command_args[0])
-      assert qualified_command, 'Failed to find %s in path' % command_args[0]
+      assert qualified_command, 'Failed to find {0!s} in path'.format(command_args[0])
       command_args[0] = qualified_command
 
     if kwargs.get('elevate_privilege'):
@@ -330,7 +330,7 @@ class _PosixPlatformSettings(_BasePlatformSettings):
       args = ['sudo'] + args
 
       if not IsElevated():
-        print 'WPR needs to run %s under sudo. Please authenticate.' % args[1]
+        print 'WPR needs to run {0!s} under sudo. Please authenticate.'.format(args[1])
         subprocess.check_call(['sudo', '-v'])  # Synchronously authenticate.
 
         prompt = ('Would you like to always allow %s to run without sudo '
@@ -368,7 +368,7 @@ class _PosixPlatformSettings(_BasePlatformSettings):
     return self.has_sysctl_cache[name]
 
   def set_sysctl(self, name, value):
-    rv = self._sysctl('%s=%s' % (name, value), use_sudo=True)[0]
+    rv = self._sysctl('{0!s}={1!s}'.format(name, value), use_sudo=True)[0]
     if rv != 0:
       logging.error('Unable to set sysctl %s: %s', name, rv)
 
@@ -393,7 +393,7 @@ class _OsxPlatformSettings(_PosixPlatformSettings):
     return self._check_output('ifconfig', *args, elevate_privilege=True)
 
   def set_sysctl(self, name, value):
-    rv = self._sysctl('-w', '%s=%s' % (name, value), use_sudo=True)[0]
+    rv = self._sysctl('-w', '{0!s}={1!s}'.format(name, value), use_sudo=True)[0]
     if rv != 0:
       logging.error('Unable to set sysctl %s: %s', name, rv)
 
@@ -436,11 +436,11 @@ class _OsxPlatformSettings(_PosixPlatformSettings):
     for line in lines:
       key_value = line.split(' : ')
       if key_value[0] == '  PrimaryService':
-        return 'State:/Network/Service/%s/DNS' % key_value[1]
+        return 'State:/Network/Service/{0!s}/DNS'.format(key_value[1])
     raise DnsReadError('Unable to find DNS service key: %s', output)
 
   def _get_primary_nameserver(self):
-    output = self._scutil('show %s' % self._get_dns_service_key())
+    output = self._scutil('show {0!s}'.format(self._get_dns_service_key()))
     match = re.search(
         br'ServerAddresses\s+:\s+<array>\s+{\s+0\s+:\s+((\d{1,3}\.){3}\d{1,3})',
         output)
@@ -452,8 +452,8 @@ class _OsxPlatformSettings(_PosixPlatformSettings):
   def _set_primary_nameserver(self, dns):
     command = '\n'.join([
       'd.init',
-      'd.add ServerAddresses * %s' % dns,
-      'set %s' % self._get_dns_service_key()
+      'd.add ServerAddresses * {0!s}'.format(dns),
+      'set {0!s}'.format(self._get_dns_service_key())
     ])
     self._scutil(command)
 
@@ -565,13 +565,13 @@ class _LinuxPlatformSettings(_PosixPlatformSettings):
     # The fileinput module uses sys.stdout as the edited file output.
     for line in fileinput.input(self.RESOLV_CONF, inplace=1, backup='.bak'):
       if line.startswith('nameserver ') and not is_first_nameserver_replaced:
-        print 'nameserver %s' % dns
+        print 'nameserver {0!s}'.format(dns)
         is_first_nameserver_replaced = True
       else:
         print line,
     if not is_first_nameserver_replaced:
-      raise DnsUpdateError('Could not find a suitable nameserver entry in %s' %
-                           self.RESOLV_CONF)
+      raise DnsUpdateError('Could not find a suitable nameserver entry in {0!s}'.format(
+                           self.RESOLV_CONF))
 
   def _get_primary_nameserver(self):
     try:
@@ -771,7 +771,7 @@ def _new_platform_settings(system, release):
     return _WindowsPlatformSettings()
   if system == 'FreeBSD':
     return _FreeBSDPlatformSettings()
-  raise NotImplementedError('Sorry %s %s is not supported.' % (system, release))
+  raise NotImplementedError('Sorry {0!s} {1!s} is not supported.'.format(system, release))
 
 
 # Create one instance of the platform-specific settings and

@@ -228,7 +228,7 @@ class HttpArchive(dict):
   def ls(self, command=None, host=None, full_path=None):
     """List all URLs that match given params."""
     return ''.join(sorted(
-        '%s\n' % r for r in self.get_requests(command, host, full_path)))
+        '{0!s}\n'.format(r) for r in self.get_requests(command, host, full_path)))
 
   def cat(self, command=None, host=None, full_path=None):
     """Print the contents of all URLs that match given params."""
@@ -237,7 +237,7 @@ class HttpArchive(dict):
       print >>out, str(request)
       print >>out, 'Untrimmed request headers:'
       for k in request.headers:
-        print >>out, '    %s: %s' % (k, request.headers[k])
+        print >>out, '    {0!s}: {1!s}'.format(k, request.headers[k])
       if request.request_body:
         print >>out, request.request_body
       print >>out, '---- Response Info', '-' * 51
@@ -249,7 +249,7 @@ class HttpArchive(dict):
                     'Response headers:') % (
           response.status, response.reason, response.delays['headers'])
       for k, v in response.headers:
-        print >>out, '    %s: %s' % (k, v)
+        print >>out, '    {0!s}: {1!s}'.format(k, v)
       print >>out, ('Chunk count: %s\n'
                     'Chunk lengths: %s\n'
                     'Chunk delays: %s') % (
@@ -304,22 +304,22 @@ class HttpArchive(dict):
       return
 
     # Note we already loaded 'replay_file'.
-    print 'Loaded %d responses' % len(self)
+    print 'Loaded {0:d} responses'.format(len(self))
 
     for archive in other_archives:
       if not os.path.exists(archive):
-        print 'Error: Replay file "%s" does not exist' % archive
+        print 'Error: Replay file "{0!s}" does not exist'.format(archive)
         return
 
       http_archive_other = HttpArchive.Load(archive)
-      print 'Loaded %d responses from %s' % (len(http_archive_other), archive)
+      print 'Loaded {0:d} responses from {1!s}'.format(len(http_archive_other), archive)
       for r in http_archive_other:
         # Only resources that are not already part of the current archive
         # get added.
         if r not in self:
-          print '\t %s ' % r
+          print '\t {0!s} '.format(r)
           self[r] = http_archive_other[r]
-    self.Persist('%s' % merged_archive)
+    self.Persist('{0!s}'.format(merged_archive))
 
   def edit(self, command=None, host=None, full_path=None):
     """Edits the single request which matches given params."""
@@ -446,12 +446,12 @@ class HttpArchive(dict):
     """Raises an IOError if filename is not writable."""
     persist_dir = os.path.dirname(os.path.abspath(filename))
     if not os.path.exists(persist_dir):
-      raise IOError('Directory does not exist: %s' % persist_dir)
+      raise IOError('Directory does not exist: {0!s}'.format(persist_dir))
     if os.path.exists(filename):
       if not os.access(filename, os.W_OK):
-        raise IOError('Need write permission on file: %s' % filename)
+        raise IOError('Need write permission on file: {0!s}'.format(filename))
     elif not os.access(persist_dir, os.W_OK):
-      raise IOError('Need write permission on directory: %s' % persist_dir)
+      raise IOError('Need write permission on directory: {0!s}'.format(persist_dir))
 
   @classmethod
   def Load(cls, filename):
@@ -516,7 +516,7 @@ class ArchivedHttpRequest(object):
 
   def __str__(self):
     scheme = 'https' if self.is_ssl else 'http'
-    return '%s %s://%s%s %s' % (
+    return '{0!s} {1!s}://{2!s}{3!s} {4!s}'.format(
         self.command, scheme, self.host, self.full_path, self.trimmed_headers)
 
   def __repr__(self):
@@ -586,12 +586,12 @@ class ArchivedHttpRequest(object):
       A string consisting of the request. Example:
       'GET www.example.com/path\nHeader-Key: header value\n'
     """
-    parts = ['%s %s%s\n' % (self.command, self.host, self.full_path)]
+    parts = ['{0!s} {1!s}{2!s}\n'.format(self.command, self.host, self.full_path)]
     if self.request_body:
-      parts.append('%s\n' % self.request_body)
+      parts.append('{0!s}\n'.format(self.request_body))
     for k, v in self.trimmed_headers:
       k = '-'.join(x.capitalize() for x in k.split('-'))
-      parts.append('%s: %s\n' % (k, v))
+      parts.append('{0!s}: {1!s}\n'.format(k, v))
     return ''.join(parts)
 
   def _GetCmpSeq(self, query=None):
@@ -950,7 +950,7 @@ def create_response(status, reason=None, headers=None, body=None):
   if headers is None:
     headers = [('content-type', 'text/plain')]
   if body is None:
-    body = "%s %s" % (status, reason)
+    body = "{0!s} {1!s}".format(status, reason)
   return ArchivedHttpResponse(11, status, reason, headers, [body])
 
 
@@ -989,14 +989,14 @@ def main():
 
   # Merge command expects an umlimited number of archives.
   if len(args) < 2:
-    print 'args: %s' % args
+    print 'args: {0!s}'.format(args)
     option_parser.error('Must specify a command and replay_file')
 
   command = args[0]
   replay_file = args[1]
 
   if not os.path.exists(replay_file):
-    option_parser.error('Replay file "%s" does not exist' % replay_file)
+    option_parser.error('Replay file "{0!s}" does not exist'.format(replay_file))
 
   http_archive = HttpArchive.Load(replay_file)
   if command == 'ls':
@@ -1014,7 +1014,7 @@ def main():
     http_archive.edit(options.command, options.host, options.full_path)
     http_archive.Persist(replay_file)
   else:
-    option_parser.error('Unknown command "%s"' % command)
+    option_parser.error('Unknown command "{0!s}"'.format(command))
   return 0
 
 

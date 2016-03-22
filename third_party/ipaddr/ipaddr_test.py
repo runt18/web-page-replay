@@ -723,9 +723,9 @@ class IpaddrUnitTest(unittest.TestCase):
     def testEmbeddedIpv4(self):
         ipv4_string = '192.168.0.1'
         ipv4 = ipaddr.IPv4Network(ipv4_string)
-        v4compat_ipv6 = ipaddr.IPv6Network('::%s' % ipv4_string)
+        v4compat_ipv6 = ipaddr.IPv6Network('::{0!s}'.format(ipv4_string))
         self.assertEqual(int(v4compat_ipv6.ip), int(ipv4.ip))
-        v4mapped_ipv6 = ipaddr.IPv6Network('::ffff:%s' % ipv4_string)
+        v4mapped_ipv6 = ipaddr.IPv6Network('::ffff:{0!s}'.format(ipv4_string))
         self.assertNotEqual(v4mapped_ipv6.ip, ipv4.ip)
         self.assertRaises(ipaddr.AddressValueError, ipaddr.IPv6Network,
                           '2001:1.1.1.1:1.1.1.1')

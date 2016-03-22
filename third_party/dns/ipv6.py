@@ -113,7 +113,7 @@ def inet_aton(text):
     #
     m = _v4_ending.match(text)
     if not m is None:
-        text = "%s:%04x:%04x" % (m.group(1),
+        text = "{0!s}:{1:04x}:{2:04x}".format(m.group(1),
                                  int(m.group(2)) * 256 + int(m.group(3)),
                                  int(m.group(4)) * 256 + int(m.group(5)))
     #

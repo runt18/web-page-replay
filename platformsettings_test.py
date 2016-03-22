@@ -40,22 +40,22 @@ Ethernet adapter Local Area Connection:
 
    Connection-specific DNS Suffix  . : somethingexample.com
    Description . . . . . . . . . . . : Int PRO/1000 MT Network Connection
-   Physical Address. . . . . . . . . : %(mac_addr)s
+   Physical Address. . . . . . . . . : {mac_addr!s}
    DHCP Enabled. . . . . . . . . . . : Yes
    Autoconfiguration Enabled . . . . : Yes
    IPv6 Address. . . . . . . . . . . : 1234:0:1000:1200:839f:d256:3a6c:210(Preferred)
    Temporary IPv6 Address. . . . . . : 2143:0:2100:1800:38f9:2d65:a3c6:120(Preferred)
-   Link-local IPv6 Address . . . . . : abcd::1234:1a33:b2cc:238%%18(Preferred)
-   IPv4 Address. . . . . . . . . . . : %(ip_addr)s(Preferred)
+   Link-local IPv6 Address . . . . . : abcd::1234:1a33:b2cc:238%18(Preferred)
+   IPv4 Address. . . . . . . . . . . : {ip_addr!s}(Preferred)
    Subnet Mask . . . . . . . . . . . : 255.255.248.0
    Lease Obtained. . . . . . . . . . : Thursday, April 28, 2011 9:40:22 PM
    Lease Expires . . . . . . . . . . : Tuesday, May 10, 2011 12:15:48 PM
-   Default Gateway . . . . . . . . . : abcd::2:37ee:ef70:56%%18
+   Default Gateway . . . . . . . . . : abcd::2:37ee:ef70:56%18
                                        172.11.25.254
    DHCP Server . . . . . . . . . . . : 172.11.22.33
    DNS Servers . . . . . . . . . . . : 8.8.4.4
    NetBIOS over Tcpip. . . . . . . . : Enabled
-""" % {'ip_addr': WINDOWS_7_IP, 'mac_addr': WINDOWS_7_MAC}
+""".format(**{'ip_addr': WINDOWS_7_IP, 'mac_addr': WINDOWS_7_MAC})
 
 WINDOWS_XP_IP = '172.1.2.3'
 WINDOWS_XP_MAC = '00-34-B8-1F-FA-70'
@@ -73,10 +73,10 @@ Ethernet adapter Local Area Connection 2:
 
         Connection-specific DNS Suffix  . : example.com
         Description . . . . . . . . . . . : Int Adapter (PILA8470B)
-        Physical Address. . . . . . . . . : %(mac_addr)s
+        Physical Address. . . . . . . . . : {mac_addr!s}
         Dhcp Enabled. . . . . . . . . . . : Yes
         Autoconfiguration Enabled . . . . : Yes
-        IP Address. . . . . . . . . . . . : %(ip_addr)s
+        IP Address. . . . . . . . . . . . : {ip_addr!s}
         Subnet Mask . . . . . . . . . . . : 255.255.254.0
         Default Gateway . . . . . . . . . : 172.1.2.254
         DHCP Server . . . . . . . . . . . : 172.1.3.241
@@ -85,7 +85,7 @@ Ethernet adapter Local Area Connection 2:
                                             8.8.4.4
         Lease Obtained. . . . . . . . . . : Thursday, April 07, 2011 9:14:55 AM
         Lease Expires . . . . . . . . . . : Thursday, April 07, 2011 1:14:55 PM
-""" % {'ip_addr': WINDOWS_XP_IP, 'mac_addr': WINDOWS_XP_MAC}
+""".format(**{'ip_addr': WINDOWS_XP_IP, 'mac_addr': WINDOWS_XP_MAC})
 
 
 # scutil show State:/Network/Global/IPv4
